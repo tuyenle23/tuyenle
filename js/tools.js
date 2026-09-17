@@ -28,6 +28,7 @@ const defaultTools = [
     { name: 'Manjaro', category: 'linux', url: 'https://manjaro.org/download/', desc: 'Dựa trên Arch, dễ cài đặt hơn' },
     
     // Other
+    { name: 'Chấm thi tự động', category: 'other', url: '#', desc: 'Công cụ chấm thi trắc nghiệm tự động' },
     { name: 'BalenaEtcher (Flash OS)', category: 'other', url: 'https://www.balenaetcher.com/', desc: 'Flash ISO ra USB/SD card, đa nền tảng' },
     { name: 'VirtualBox', category: 'other', url: 'https://www.virtualbox.org/', desc: 'Máy ảo miễn phí, chạy Linux/Win trên Win/Mac/Linux' },
     { name: 'VMware Workstation Player', category: 'other', url: 'https://www.vmware.com/products/workstation-player.html', desc: 'Máy ảo miễn phí cho cá nhân' },
@@ -43,17 +44,36 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function loadTools() {
-    const stored = loadFromLocalStorage(TOOLS_STORAGE_KEY, null);
-    if (stored && stored.length > 0) {
-        tools = stored;
-    } else {
-        tools = [...defaultTools];
+    try {
+        const stored = localStorage.getItem(TOOLS_STORAGE_KEY);
+        let storedTools = [];
+        if (stored) {
+            const parsed = JSON.parse(stored);
+            if (Array.isArray(parsed)) storedTools = parsed;
+        }
+        
+        const existingUrls = new Set(storedTools.map(t => t.url));
+        const merged = [...storedTools];
+        defaultTools.forEach((def, idx) => {
+            if (!existingUrls.has(def.url)) {
+                merged.unshift({ ...def, id: def.id || 'default-merged-' + idx });
+            }
+        });
+        
+        tools = merged.length > 0 ? merged : [...defaultTools];
         saveTools();
+    } catch (e) {
+        console.error('Lỗi đọc localStorage:', e);
+        tools = [...defaultTools];
     }
 }
 
 function saveTools() {
-    saveToLocalStorage(TOOLS_STORAGE_KEY, tools);
+    if (typeof saveToLocalStorage === 'function') {
+        saveToLocalStorage(TOOLS_STORAGE_KEY, tools);
+    } else {
+        localStorage.setItem(TOOLS_STORAGE_KEY, JSON.stringify(tools));
+    }
 }
 
 function renderTools() {
@@ -67,6 +87,7 @@ function renderTools() {
     Object.keys(categories).forEach(cat => {
         const catTools = tools.filter(t => t.category === cat);
         const container = document.getElementById(categories[cat].container);
+        if (!container) return;
         
         if (catTools.length === 0) {
             container.innerHTML = '<div class="empty-tools"><p>Chưa có công cụ nào. Hãy thêm bên dưới!</p></div>';
@@ -108,7 +129,7 @@ function handleAddTool(e) {
         name: document.getElementById('toolName').value.trim(),
         category: document.getElementById('toolCategory').value,
         url: document.getElementById('toolUrl').value.trim(),
-        description: document.getElementById('toolDesc').value.trim(),
+        desc: document.getElementById('toolDesc').value.trim(),
         addedAt: new Date().toISOString()
     };
     
@@ -131,7 +152,8 @@ function handleAddTool(e) {
 }
 
 function resetToolForm() {
-    document.getElementById('addToolForm').reset();
+    const form = document.getElementById('addToolForm');
+    if (form) form.reset();
 }
 
 function deleteTool(id) {
@@ -159,7 +181,8 @@ function exportTools() {
 }
 
 function importTools() {
-    document.getElementById('importToolsFile').click();
+    const input = document.getElementById('importToolsFile');
+    if (input) input.click();
 }
 
 function handleToolsImport(event) {
@@ -189,7 +212,8 @@ function handleToolsImport(event) {
 }
 
 function escapeHtml(text) {
+    if (text === null || text === undefined) return '';
     const div = document.createElement('div');
-    div.textContent = text;
+    div.textContent = String(text);
     return div.innerHTML;
 }
