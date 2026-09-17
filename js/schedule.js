@@ -9,10 +9,14 @@ document.addEventListener('DOMContentLoaded', () => {
     renderEvents();
     
     const form = document.getElementById('eventForm');
-    if (form) form.addEventListener('submit', handleFormSubmit);
+    if (form) {
+        form.addEventListener('submit', handleFormSubmit);
+    }
     
     const filterType = document.getElementById('filterType');
-    if (filterType) filterType.addEventListener('change', filterEvents);
+    if (filterType) {
+        filterType.addEventListener('change', filterEvents);
+    }
 });
 
 function setDefaultDate() {
@@ -22,48 +26,54 @@ function setDefaultDate() {
 }
 
 function loadEvents() {
-    if (typeof loadFromLocalStorage === 'function') {
-        events = loadFromLocalStorage(STORAGE_KEY, []);
-    } else {
+    try {
         const stored = localStorage.getItem(STORAGE_KEY);
         events = stored ? JSON.parse(stored) : [];
+        if (!Array.isArray(events)) events = [];
+    } catch (e) {
+        console.error('Lỗi đọc:', e);
+        events = [];
     }
 }
 
 function saveEvents() {
-    if (typeof saveToLocalStorage === 'function') {
-        saveToLocalStorage(STORAGE_KEY, events);
-    } else {
+    try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
+    } catch (e) {
+        console.error('Lỗi lưu:', e);
     }
 }
 
 function handleFormSubmit(e) {
     e.preventDefault();
     
-    const event = {
+    const titleEl = document.getElementById('eventTitle');
+    const dateEl = document.getElementById('eventDate');
+    const startEl = document.getElementById('eventStartTime');
+    const endEl = document.getElementById('eventEndTime');
+    const descEl = document.getElementById('eventDesc');
+    const typeEl = document.getElementById('eventType');
+    
+    const newEvent = {
         id: Date.now().toString(),
-        title: document.getElementById('eventTitle').value.trim(),
-        date: document.getElementById('eventDate').value,
-        startTime: document.getElementById('eventStartTime')?.value || '',
-        endTime: document.getElementById('eventEndTime')?.value || '',
-        description: document.getElementById('eventDesc')?.value.trim() || '',
-        type: document.getElementById('eventType')?.value || 'personal',
+        title: titleEl ? titleEl.value.trim() : '',
+        date: dateEl ? dateEl.value : '',
+        startTime: startEl ? startEl.value : '',
+        endTime: endEl ? endEl.value : '',
+        description: descEl ? descEl.value.trim() : '',
+        type: typeEl ? typeEl.value : 'personal',
         createdAt: new Date().toISOString()
     };
     
-    if (!event.title || !event.date) {
+    if (!newEvent.title || !newEvent.date) {
         alert('Vui lòng nhập tiêu đề và chọn ngày!');
         return;
     }
     
-    events.push(event);
+    events.push(newEvent);
     saveEvents();
     renderEvents();
-    resetForm();
-}
-
-function resetForm() {
+    
     const form = document.getElementById('eventForm');
     if (form) form.reset();
     setDefaultDate();
@@ -112,7 +122,6 @@ function renderEvents() {
                     </div>
                     ${event.description ? `<p class="event-desc">${escapeHtml(event.description)}</p>` : ''}
                     <div class="event-actions">
-                        <button class="btn-edit" type="button" onclick="editEvent('${event.id}')">Sửa</button>
                         <button class="btn-delete" type="button" onclick="deleteEvent('${event.id}')">Xóa</button>
                     </div>
                 </div>
@@ -145,30 +154,9 @@ function deleteEvent(id) {
     }
 }
 
-function editEvent(id) {
-    const event = events.find(e => e.id === id);
-    if (!event) return;
-    
-    document.getElementById('eventTitle').value = event.title;
-    document.getElementById('eventDate').value = event.date;
-    const startEl = document.getElementById('eventStartTime');
-    if (startEl) startEl.value = event.startTime || '';
-    const endEl = document.getElementById('eventEndTime');
-    if (endEl) endEl.value = event.endTime || '';
-    const descEl = document.getElementById('eventDesc');
-    if (descEl) descEl.value = event.description || '';
-    const typeEl = document.getElementById('eventType');
-    if (typeEl) typeEl.value = event.type;
-    
-    events = events.filter(e => e.id !== id);
-    saveEvents();
-    renderEvents();
-    document.getElementById('eventTitle').focus();
-}
-
 function clearAllEvents() {
     if (events.length === 0) return;
-    if (confirm(`Xóa tất cả ${events.length} sự kiện? Hành động này không thể hoàn tác!`)) {
+    if (confirm(`Xóa tất cả ${events.length} sự kiện?`)) {
         events = [];
         saveEvents();
         renderEvents();
