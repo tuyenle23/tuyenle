@@ -52,12 +52,22 @@ function loadTools() {
             if (Array.isArray(parsed)) storedTools = parsed;
         }
         
-        const existingUrls = new Set(storedTools.map(t => t.url));
-        const merged = [...storedTools];
-        defaultTools.forEach((def, idx) => {
-            if (!existingUrls.has(def.url)) {
-                merged.unshift({ ...def, id: def.id || 'default-merged-' + idx });
+        // Map theo tên (không phân biệt hoa thường) để ghi đè/giữ bản user đã tùy chỉnh
+        const storedMap = new Map(storedTools.map(t => [(t.name || '').toLowerCase().trim(), t]));
+        
+        const merged = defaultTools.map((def, idx) => {
+            const defNameKey = (def.name || '').toLowerCase().trim();
+            if (storedMap.has(defNameKey)) {
+                const existingItem = storedMap.get(defNameKey);
+                storedMap.delete(defNameKey); // Đánh dấu đã ghép
+                return existingItem; // Ưu tiên giữ lại bản trong máy user
             }
+            return { ...def, id: def.id || 'default-merged-' + idx };
+        });
+        
+        // Thêm các tool cá nhân mới ngoài default vào cuối danh sách
+        storedMap.forEach(item => {
+            merged.push(item);
         });
         
         tools = merged.length > 0 ? merged : [...defaultTools];
