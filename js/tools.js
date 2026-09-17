@@ -28,7 +28,7 @@ const defaultTools = [
     { name: 'Manjaro', category: 'linux', url: 'https://manjaro.org/download/', desc: 'Dựa trên Arch, dễ cài đặt hơn' },
     
     // Other
-    { name: 'Chấm thi tự động', category: 'other', url: '#', desc: 'Công cụ chấm thi trắc nghiệm tự động' },
+    { name: 'Chấm thi tự động', category: 'other', url: 'https://drive.google.com/file/d/1jYS99R1Lb1tiGJwDemIe8mK-aBQY5H1e/view?usp=sharing', desc: 'Công cụ chấm thi trắc nghiệm tự động' },
     { name: 'BalenaEtcher (Flash OS)', category: 'other', url: 'https://www.balenaetcher.com/', desc: 'Flash ISO ra USB/SD card, đa nền tảng' },
     { name: 'VirtualBox', category: 'other', url: 'https://www.virtualbox.org/', desc: 'Máy ảo miễn phí, chạy Linux/Win trên Win/Mac/Linux' },
     { name: 'VMware Workstation Player', category: 'other', url: 'https://www.vmware.com/products/workstation-player.html', desc: 'Máy ảo miễn phí cho cá nhân' },
