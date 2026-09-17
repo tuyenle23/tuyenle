@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch trình - tuyenle</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/schedule.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">tuyenle</div>
+            <ul class="nav-links">
+                <li><a href="../index.html">Trang chủ</a></li>
+                <li><a href="schedule.html" class="active">📅 Lịch trình</a></li>
+                <li><a href="tools.html">🛠 Tools & Downloads</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <h1>📅 tuyenle - Lịch trình & Dữ liệu cá nhân</h1>
+            <p>Quản lý sự kiện, nhắc việc, ghi chú hàng ngày - lưu localStorage trên trình duyệt</p>
+        </section>
+
+        <section class="schedule-form">
+            <h2>➕ Thêm sự kiện mới</h2>
+            <form id="eventForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Tiêu đề *</label>
+                        <input type="text" id="eventTitle" required placeholder="Ví dụ: Họp team, Sinh nhật bạn...">
+                    </div>
+                    <div class="form-group">
+                        <label>Ngày *</label>
+                        <input type="date" id="eventDate" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Giờ bắt đầu</label>
+                        <input type="time" id="eventStartTime">
+                    </div>
+                    <div class="form-group">
+                        <label>Giờ kết thúc</label>
+                        <input type="time" id="eventEndTime">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Mô tả / Ghi chú</label>
+                    <textarea id="eventDesc" rows="3" placeholder="Chi tiết thêm..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Loại</label>
+                    <select id="eventType">
+                        <option value="personal">📝 Cá nhân</option>
+                        <option value="work">💼 Công việc</option>
+                        <option value="health">🏥 Sức khỏe</option>
+                        <option value="other">📌 Khác</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Lưu sự kiện</button>
+            </form>
+        </section>
+
+        <section class="schedule-list">
+            <div class="list-header">
+                <h2>📋 Danh sách sự kiện</h2>
+                <div class="filter-controls">
+                    <select id="filterType" onchange="filterEvents()">
+                        <option value="all">Tất cả</option>
+                        <option value="personal">Cá nhân</option>
+                        <option value="work">Công việc</option>
+                        <option value="health">Sức khỏe</option>
+                        <option value="other">Khác</option>
+                    </select>
+                    <button class="btn btn-danger" onclick="clearAllEvents()" id="clearBtn">Xóa tất cả</button>
+                </div>
+            </div>
+            <div id="eventsContainer" class="events-container">
+                <!-- Events will be rendered here -->
+            </div>
+        </section>
+
+        <section class="data-management">
+            <h2>💾 Quản lý dữ liệu</h2>
+            <div class="data-buttons">
+                <button class="btn btn-secondary" onclick="exportData()">📤 Xuất dữ liệu (JSON)</button>
+                <button class="btn btn-secondary" onclick="importData()">📥 Nhập dữ liệu (JSON)</button>
+                <input type="file" id="importFile" accept=".json" style="display: none;" onchange="handleImport(event)">
+            </div>
+            <p class="data-note">Dữ liệu được lưu trong localStorage của trình duyệt. Hãy xuất backup định kỳ!</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 tuyenle. Dữ liệu lưu local trên trình duyệt.</p>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/schedule.js"></script>
+</body>
+</html>

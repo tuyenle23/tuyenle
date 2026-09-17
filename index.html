@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+    <script>eruda.init();</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tuyenle - Trang Cá Nhân</title>
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- ⚠️ Firebase SDK chuẩn chạy trên GitHub Pages / Mobile -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+      import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc, onSnapshot, writeBatch } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+      // ⚠️ THAY BẰNG CONFIG THẬT CỦA BẠN (Lấy ở Firebase Console -> Project Settings -> Web App)
+      const firebaseConfig = {
+        apiKey: "AIzaSyYOUR_API_KEY_HERE",
+        authDomain: "your-project-id.firebaseapp.com",
+        projectId: "your-project-id",
+        storageBucket: "your-project-id.appspot.com",
+        messagingSenderId: "123456789019",
+        appId: "1:123456789019:web:abcdef123456"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      window.db = db;
+      window.firebaseModules = { collection, getDocs, doc, setDoc, deleteDoc, onSnapshot, writeBatch };
+      window.dispatchEvent(new Event('firebase-ready'));
+    </script>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">tuyenle</div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Trang chủ</a></li>
+                <li><a href="pages/schedule.html">📅 Lịch trình</a></li>
+                <li><a href="pages/tools.html">🛠 Tools & Downloads</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Chào mừng đến tuyenle</h1>
+            <p>Quản lý lịch trình, dữ liệu cá nhân và bộ công cụ cài đặt</p>
+        </section>
+
+        <section class="cards">
+            <article class="card">
+                <h3>📅 Lịch trình & Dữ liệu cá nhân</h3>
+                <p>Quản lý sự kiện, nhắc việc, ghi chú hàng ngày</p>
+                <a href="pages/schedule.html" class="btn">Xem lịch trình</a>
+            </article>
+
+            <article class="card">
+                <h3>🛠 Tools & Downloads</h3>
+                <p>Cài Windows, App điện thoại, các bản Linux</p>
+                <a href="pages/tools.html" class="btn">Xem tools</a>
+            </article>
+        </section>
+
+        <section class="info">
+            <h2>📱 Truy cập từ mọi thiết bị</h2>
+            <p>Website chạy trên GitHub Pages kết hợp Firebase Realtime Cloud.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 tuyenle. Deploy miễn phí với GitHub Pages.</p>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

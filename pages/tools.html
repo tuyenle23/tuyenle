@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tools & Downloads - tuyenle</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/tools.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">tuyenle</div>
+            <ul class="nav-links">
+                <li><a href="../index.html">Trang chủ</a></li>
+                <li><a href="schedule.html">📅 Lịch trình</a></li>
+                <li><a href="tools.html" class="active">🛠 Tools & Downloads</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <h1>🛠 tuyenle - Tools & Downloads</h1>
+            <p>Bộ công cụ cài Windows, App điện thoại, các bản Linux - Link tải chính thống</p>
+        </section>
+
+        <section class="tools-category">
+            <h2 class="category-title">🪟 Cài đặt Windows</h2>
+            <div class="tools-grid" id="windowsTools">
+                <!-- Windows tools will be rendered here -->
+            </div>
+        </section>
+
+        <section class="tools-category">
+            <h2 class="category-title">📱 App điện thoại (APK)</h2>
+            <div class="tools-grid" id="phoneApps">
+                <!-- Phone apps will be rendered here -->
+            </div>
+        </section>
+
+        <section class="tools-category">
+            <h2 class="category-title">🐧 Các bản Linux</h2>
+            <div class="tools-grid" id="linuxDistros">
+                <!-- Linux distros will be rendered here -->
+            </div>
+        </section>
+
+        <section class="tools-category">
+            <h2 class="category-title">🔧 Công cụ hữu ích khác</h2>
+            <div class="tools-grid" id="otherTools">
+                <!-- Other tools will be rendered here -->
+            </div>
+        </section>
+
+        <section class="add-tool-section">
+            <h2>➕ Thêm link công cụ của bạn</h2>
+            <p>Lưu vào localStorage, chỉ hiển thị trên trình duyệt của bạn</p>
+            <form id="addToolForm" class="tool-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Tên công cụ *</label>
+                        <input type="text" id="toolName" required placeholder="Ví dụ: Windows 11 ISO, Termux, Ubuntu 22.04...">
+                    </div>
+                    <div class="form-group">
+                        <label>Danh mục *</label>
+                        <select id="toolCategory" required>
+                            <option value="windows">🪟 Windows</option>
+                            <option value="phone">📱 Điện thoại</option>
+                            <option value="linux">🐧 Linux</option>
+                            <option value="other">🔧 Khác</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Link tải *</label>
+                    <input type="url" id="toolUrl" required placeholder="https://example.com/download" pattern="https://.*">
+                </div>
+                <div class="form-group">
+                    <label>Mô tả</label>
+                    <textarea id="toolDesc" rows="2" placeholder="Ghi chú: phiên bản, dung lượng, yêu cầu hệ thống..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Thêm công cụ</button>
+            </form>
+        </section>
+
+        <section class="data-management">
+            <h2>💾 Quản lý dữ liệu Tools</h2>
+            <div class="data-buttons">
+                <button class="btn btn-secondary" onclick="exportTools()">📤 Xuất tools (JSON)</button>
+                <button class="btn btn-secondary" onclick="importTools()">📥 Nhập tools (JSON)</button>
+                <input type="file" id="importToolsFile" accept=".json" style="display: none;" onchange="handleToolsImport(event)">
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 tuyenle. Chỉ lưu link tham khảo - không host file.</p>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/tools.js"></script>
+</body>
+</html>
